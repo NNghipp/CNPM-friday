@@ -41,3 +41,12 @@ api_router.include_router(tasks_router, prefix="/tasks", tags=["tasks"])
 @api_router.get("/test")
 async def test_endpoint():
     return {"message": "Test endpoint works"}
+
+# Example structure for future endpoints:
+# from app.api.v1 import users, projects
+# api_router.include_router(users.router, prefix="/users", tags=["users"])
+# api_router.include_router(projects.router, prefix="/projects", tags=["projects"])
+
+api_router.include_router(profile.router, tags=["Profile"])
+api_router.include_router(user_import.router, tags=["User Import"])
+api_router.include_router(notifications.router, tags=["Notifications"])
