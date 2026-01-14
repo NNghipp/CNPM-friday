@@ -1,6 +1,14 @@
 """Main API router for version 1 endpoints."""
 
 from fastapi import APIRouter
+from app.api.v1 import (
+    departments, 
+    subjects,
+    semesters,
+    academic_classes,
+    class_enrollments,
+    syllabuses
+    )
 
 # Create the main API router
 api_router = APIRouter()
@@ -8,6 +16,14 @@ api_router = APIRouter()
 # Auth 
 from app.api.v1.auth import router as auth_router
 api_router.include_router(auth_router, prefix="/auth", tags=["authentication"])
+
+# Academic Management endpoints
+api_router.include_router(departments.router, prefix="/departments", tags=["departments"])
+api_router.include_router(subjects.router, prefix="/subjects", tags=["subjects"])
+api_router.include_router(semesters.router, prefix="/semesters", tags=["semesters"])
+api_router.include_router(academic_classes.router, prefix="/academic_classes", tags=["academic_classes"])
+api_router.include_router(class_enrollments.router, prefix="/class_enrollments", tags=["class_enrollments"])
+api_router.include_router(syllabuses.router, prefix="/syllabuses", tags=["syllabuses"])
 
 # Topics (BE-PROJ-01)
 from app.api.v1.endpoints.topics import router as topics_router
