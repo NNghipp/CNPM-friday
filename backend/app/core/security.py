@@ -7,6 +7,9 @@ import bcrypt
 
 from app.core.config import settings
 
+# Setup password hashing (Bcrypt)
+pwd_context = CryptContext(schemes=["bcrypt", "sha256_crypt"], deprecated="auto")
+
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Check if plain password matches hashed password."""

@@ -1,35 +1,20 @@
-
 import axios from 'axios';
 
-// Create Axios instance
-const axiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
-    timeout: 10000,
-});
+const API_URL = 'http://localhost:8000/api/v1'; // Điều chỉnh theo route của bạn
 
-// Request interceptor: Attach token if exists
-axiosInstance.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem('access_token');
-        if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
+// Tự động đính kèm Token vào mỗi request nếu có
+const getHeader = () => {
+  const token = localStorage.getItem('token');
+  return { headers: { Authorization: `Bearer ${token}` } };
+};
 
-// Response interceptor: Handle 401 errors (token expired)
-axiosInstance.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        if (error.response && error.response.status === 401) {
-            // Optionally, handle logout or redirect to login
-            localStorage.removeItem('access_token');
-            window.location.href = '/login';
-        }
-        return Promise.reject(error);
-    }
-);
+export const userService = {
+  // Lấy thông tin user hiện tại
+  getProfile: () => axios.get(`${API_URL}/users/me`, getHeader()),
 
-export default axiosInstance;
+  // Cập nhật thông tin (Name, Phone)
+  updateProfile: (data) => axios.patch(`${API_URL}/users/me`, data, getHeader()),
+
+  // Đổi mật khẩu
+  changePassword: (data) => axios.post(`${API_URL}/users/change-password`, data, getHeader()),
+};
