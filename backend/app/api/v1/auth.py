@@ -1,4 +1,3 @@
-import logging
 from datetime import timedelta
 from typing import Any
 
@@ -14,9 +13,6 @@ from app.models.all_models import User
 from app.schemas import token as token_schema
 from app.schemas import user as user_schema
 
-# Configure logger
-logger = logging.getLogger(__name__)
-
 router = APIRouter()
 
 @router.post("/login", response_model=token_schema.Token)
@@ -27,37 +23,28 @@ async def login_access_token(
     """
     OAuth2 compatible token login, get an access token for future requests.
     """
-    try:
-        # 1. Tìm user theo email
-        result = await db.execute(select(User).where(User.email == form_data.username))
-        user = result.scalars().first()
+    # 1. Tìm user theo email
+    result = await db.execute(select(User).where(User.email == form_data.username))
+    user = result.scalars().first()
 
-        # 2. Kiểm tra mật khẩu
-        if not user or not security.verify_password(form_data.password, user.password_hash):
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Incorrect email or password",
-            )
-        
-        if not user.is_active:
-            raise HTTPException(status_code=400, detail="Inactive user")
-
-        # 3. Tạo Token
-        access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-        return {
-            "access_token": security.create_access_token(
-                subject=user.user_id, expires_delta=access_token_expires
-            ),
-            "token_type": "bearer",
-        }
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error during login for user {form_data.username}: {str(e)}", exc_info=True)
+    # 2. Kiểm tra mật khẩu
+    if not user or not security.verify_password(form_data.password, user.password_hash):
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Internal server error: {str(e)}"
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect email or password",
         )
+    
+    if not user.is_active:
+        raise HTTPException(status_code=400, detail="Inactive user")
+
+    # 3. Tạo Token
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    return {
+        "access_token": security.create_access_token(
+            subject=user.user_id, expires_delta=access_token_expires
+        ),
+        "token_type": "bearer",
+    }
 
 @router.post("/register", response_model=user_schema.UserResponse)
 async def register_user(
