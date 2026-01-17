@@ -23,9 +23,7 @@ AsyncSessionLocal = sessionmaker(
 )
 
 
-from typing import AsyncGenerator
-
-async def get_db() -> AsyncGenerator[AsyncSession, None]:
+async def get_db() -> AsyncSession:
     """
     Dependency function for FastAPI endpoints.
     Provides an async database session and handles cleanup.
