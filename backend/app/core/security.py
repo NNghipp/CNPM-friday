@@ -7,8 +7,18 @@ from passlib.context import CryptContext
 
 from app.core.config import settings
 
+try:  # pragma: no cover - defensive patch for bcrypt>=4.1
+    import bcrypt  # type: ignore
+    from types import SimpleNamespace
+
+    if not hasattr(bcrypt, "__about__") and hasattr(bcrypt, "__version__"):
+        bcrypt.__about__ = SimpleNamespace(__version__=bcrypt.__version__)
+except Exception:  # noqa: BLE001 - failing silently keeps startup resilient
+    pass
+
 # Setup password hashing (Bcrypt)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+MAX_BCRYPT_BYTES = 72
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -18,6 +28,8 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 def get_password_hash(password: str) -> str:
     """Hash a password for storing in database."""
+    if len(password.encode("utf-8")) > MAX_BCRYPT_BYTES:
+        raise ValueError("Password must be at most 72 bytes when encoded in UTF-8")
     return pwd_context.hash(password)
 
 
