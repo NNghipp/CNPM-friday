@@ -86,12 +86,21 @@ from app.api.v1.mentoring import router as mentoring_router
 api_router.include_router(mentoring_router, prefix="/mentoring", tags=["mentoring"])
 from app.api.v1.peer_reviews import router as peer_reviews_router
 api_router.include_router(peer_reviews_router, prefix="/peer-reviews", tags=["peer-reviews"])
+
+# Evaluations - BE4 Implementation
+from app.api.v1.evaluations import router as evaluations_router
+api_router.include_router(evaluations_router, prefix="/evaluations", tags=["evaluations"])
+
+# Resources - BE4 Implementation
+from app.api.v1.resources import router as resources_router
+api_router.include_router(resources_router, prefix="/resources", tags=["resources"])
+
+# from app.api.v1.peer_reviews import router as peer_reviews_router
+# api_router.include_router(peer_reviews_router, prefix="/peer-reviews", tags=["peer-reviews"])
 # from app.api.v1.milestones import router as milestones_router
 # api_router.include_router(milestones_router, prefix="/milestones", tags=["milestones"])
 # from app.api.v1.submissions import router as submissions_router
 # api_router.include_router(submissions_router, prefix="/submissions", tags=["submissions"])
-# from app.api.v1.resources import router as resources_router
-# api_router.include_router(resources_router, prefix="/resources", tags=["resources"])
 
 # ===== ADMIN ENDPOINTS (Development Only) =====
 @api_router.post("/admin/init-db", tags=["admin"])
