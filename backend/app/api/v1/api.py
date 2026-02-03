@@ -73,10 +73,10 @@ api_router.include_router(user_import_router, prefix="/user-import", tags=["user
 
 # ===== PHASE 3 ENDPOINTS (Real-time - TO BE ADDED) =====
 # Uncomment these after copying files from Giao_Viec_3/CODE/be/
-# from app.api.v1.channels import router as channels_router
-# api_router.include_router(channels_router, prefix="/channels", tags=["channels"])
-# from app.api.v1.messages import router as messages_router
-# api_router.include_router(messages_router, prefix="/messages", tags=["messages"])
+from app.api.v1.channels import router as channels_router
+api_router.include_router(channels_router, prefix="/channels", tags=["channels"])
+from app.api.v1.messages import router as messages_router
+api_router.include_router(messages_router, prefix="/messages", tags=["messages"])
 # from app.api.v1.meetings import router as meetings_router
 # api_router.include_router(meetings_router, prefix="/meetings", tags=["meetings"])
 
@@ -84,6 +84,8 @@ api_router.include_router(user_import_router, prefix="/user-import", tags=["user
 # Mentoring - BE1 Implementation
 from app.api.v1.mentoring import router as mentoring_router
 api_router.include_router(mentoring_router, prefix="/mentoring", tags=["mentoring"])
+from app.api.v1.peer_reviews import router as peer_reviews_router
+api_router.include_router(peer_reviews_router, prefix="/peer-reviews", tags=["peer-reviews"])
 
 # Evaluations - BE4 Implementation
 from app.api.v1.evaluations import router as evaluations_router
