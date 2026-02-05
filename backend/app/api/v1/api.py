@@ -51,6 +51,11 @@ api_router.include_router(subjects_router, prefix="/subjects", tags=["subjects"]
 from app.api.v1.syllabuses import router as syllabuses_router
 api_router.include_router(syllabuses_router, prefix="/syllabuses", tags=["syllabuses"])
 
+from app.api.v1 import milestones, submissions
+
+api_router.include_router(milestones.router)
+api_router.include_router(submissions.router)
+
 # Departments
 from app.api.v1.departments import router as departments_router
 api_router.include_router(departments_router, prefix="/departments", tags=["departments"])
@@ -71,6 +76,7 @@ api_router.include_router(notifications_router, prefix="/notifications", tags=["
 from app.api.v1.user_import import router as user_import_router
 api_router.include_router(user_import_router, prefix="/user-import", tags=["user-import"])
 
+# ===== PHASE 3 ENDPOINTS (Real-time) =====
 # ===== PHASE 3 ENDPOINTS (Real-time - TO BE ADDED) =====
 # Uncomment these after copying files from Giao_Viec_3/CODE/be/
 from app.api.v1.channels import router as channels_router
@@ -87,6 +93,9 @@ api_router.include_router(mentoring_router, prefix="/mentoring", tags=["mentorin
 from app.api.v1.peer_reviews import router as peer_reviews_router
 api_router.include_router(peer_reviews_router, prefix="/peer-reviews", tags=["peer-reviews"])
 
+from app.api.v1.meetings import router as meetings_router
+api_router.include_router(meetings_router, prefix="/meetings", tags=["meetings"])
+
 # Evaluations - BE4 Implementation
 from app.api.v1.evaluations import router as evaluations_router
 api_router.include_router(evaluations_router, prefix="/evaluations", tags=["evaluations"])
@@ -94,6 +103,7 @@ api_router.include_router(evaluations_router, prefix="/evaluations", tags=["eval
 # Resources - BE4 Implementation
 from app.api.v1.resources import router as resources_router
 api_router.include_router(resources_router, prefix="/resources", tags=["resources"])
+
 
 # from app.api.v1.peer_reviews import router as peer_reviews_router
 # api_router.include_router(peer_reviews_router, prefix="/peer-reviews", tags=["peer-reviews"])
